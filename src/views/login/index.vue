@@ -1,6 +1,5 @@
 <template>
-  <!-- 一级路由容器 -->
-  <router-view />
+  <div>登录页</div>
 </template>
 
 <script>
@@ -8,5 +7,7 @@ export default {
 
 }
 </script>
-<style lang="less">
+
+<style>
+
 </style>
