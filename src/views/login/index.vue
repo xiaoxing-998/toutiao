@@ -5,21 +5,21 @@
         <img src="../../assets/img/logo_index.png" alt="logo" />
       </div>
       <!-- 登录表单容器 -->
-      <el-form style="margin-top:30px">
+      <el-form ref="myForm" style="margin-top:30px" :model="loginForm" :rules="loginRules">
         <!-- 表单域 一行一个域 -->
-        <el-form-item>
+        <el-form-item prop="mobile">
           <!-- 手机号输入框 -->
-          <el-input placeholder="请输入手机号"></el-input>
+          <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item>
-            <el-input style="width:65%" placeholder="请输入验证码"></el-input>
+        <el-form-item prop="code">
+            <el-input v-model="loginForm.code" style="width:65%" placeholder="请输入验证码"></el-input>
             <el-button plain style="float:right">发送验证码</el-button>
         </el-form-item>
-        <el-form-item>
-            <el-checkbox>我已阅读并同意不敲代码</el-checkbox>
+        <el-form-item prop="agree">
+            <el-checkbox v-model="loginForm.agree">我已阅读并同意不敲代码</el-checkbox>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" style="width:100%">登录</el-button>
+            <el-button type="primary" @click="submitData" style="width:100%">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -27,7 +27,51 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      // 表单数据 是一个对象
+      loginForm: {
+        //   手机号
+        mobile: '',
+        // 验证码
+        code: '',
+        // 是否同意
+        agree: false
+
+      },
+      //   验证规则对象
+      loginRules: {
+        mobile: [{ required: true, message: '请输入您的手机号' }, {
+          pattern: /^1[3456789]\d{9}$/,
+          message: '手机号格式不正确'
+        }],
+        code: [{ required: true, message: '请输入您的验证码' }, {
+          pattern: /^\d{6}$/,
+          message: '验证码格式不正确'
+        }],
+        // 自定义函数
+        agree: [{ validator: function (rule, value, callback) {
+          if (value) {
+            callback()// 认为通过
+          } else {
+            callback(new Error('请同意此协议'))
+          }
+        } }]
+      }
+    }
+  },
+  methods: {
+    submitData () {
+      this.$refs.myForm.validate(function (success) {
+        if (success) {
+          // 调接口发请求 请求数据库---校验
+          console.log('校验成功')
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
