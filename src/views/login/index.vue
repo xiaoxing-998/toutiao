@@ -27,6 +27,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -38,7 +39,8 @@ export default {
         code: '',
         // 是否同意
         agree: false
-
+        // 当前登录状态码
+        // statuscode: ''
       },
       //   验证规则对象
       loginRules: {
@@ -63,10 +65,26 @@ export default {
   },
   methods: {
     submitData () {
-      this.$refs.myForm.validate(function (success) {
+      this.$refs.myForm.validate(success => {
         if (success) {
           // 调接口发请求 请求数据库---校验
-          console.log('校验成功')
+          this.$axios({
+            url: '/authorizations',
+            method: 'post',
+            data: this.loginForm
+          }).then(res => {
+            // this.statuscode = res.status
+            window.localStorage.setItem('user-token', res.data.data.token)
+            this.$router.push('/')// 成功后跳到主页
+          }).catch(() => {
+            this.$message({
+              message: '警告，您的手机号或验证码不正确',
+              type: 'warning'
+            })
+            // 用户非实名认证用户
+            // console.log(this.statuscode)
+            // if (res.status === 403)
+          })
         }
       })
     }
