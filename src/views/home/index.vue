@@ -7,7 +7,9 @@
     <!-- 中间内容容器 -->
     <el-container>
       <!-- 头部 -->
-      <el-header>头部</el-header>
+      <el-header>
+        <topTitle></topTitle>
+      </el-header>
       <!-- 二级视图 -->
       <el-main>主要区域</el-main>
     </el-container>
@@ -16,10 +18,12 @@
 
 <script>
 import navAside from '../../components/home/layout-aside'
+import topTitle from '../../components/home/layout-header'
 export default {
   // 局部注册组件
   components: {
-    navAside
+    navAside,
+    topTitle
   }
 }
 </script>
