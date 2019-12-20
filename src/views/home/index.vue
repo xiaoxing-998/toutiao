@@ -11,7 +11,9 @@
         <topTitle></topTitle>
       </el-header>
       <!-- 二级视图 -->
-      <el-main>主要区域</el-main>
+      <el-main style="padding:0">
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -31,7 +33,7 @@ export default {
 <style  lang="less" scoped>
 .navaside {
   background-color: #353b4e;
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
 
 }
