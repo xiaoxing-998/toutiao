@@ -17,14 +17,14 @@
 </template>
 
 <script>
-import navAside from '../../components/home/layout-aside'
-import topTitle from '../../components/home/layout-header'
+// import navAside from '../../components/home/layout-aside'
+// import topTitle from '../../components/home/layout-header'
 export default {
   // 局部注册组件
-  components: {
-    navAside,
-    topTitle
-  }
+  // components: {
+  //   navAside,
+  //   topTitle
+  // }
 }
 </script>
 
