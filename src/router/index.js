@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/login'// 默认访问登录页
   },
   {
     path: '/home',

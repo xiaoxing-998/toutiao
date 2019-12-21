@@ -12,10 +12,10 @@
           <el-dropdown trigger="click" @command="handleCommand">
             <div class="right-contnet">
               <!-- 用户头像 -->
-              <img :src="!userInfo.photo ? userInfo.photo: defaultAvatar" alt="avatar">
+              <img :src="userInfo.photo ? userInfo.photo: defaultAvatar" alt="avatar">
               <!-- <img src="../../assets/img/少女小埋.jpg" alt="photo" /> -->
               <!-- 用户昵称 -->
-              <span class="user-name" v-html="!userInfo.name?`${userInfo.name}&nbsp;&nbsp;<i class=el-icon-caret-bottom></i>`:`野原新之助&nbsp;&nbsp;<i class=el-icon-caret-bottom></i>`">
+              <span class="user-name" v-html="userInfo.name?`${userInfo.name}&nbsp;&nbsp;<i class=el-icon-caret-bottom></i>`:`野原新之助&nbsp;&nbsp;<i class=el-icon-caret-bottom></i>`">
                 <!-- {{userInfo.name}} -->
                 <!-- <i class="el-icon-caret-bottom"></i> -->
               </span>
