@@ -43,16 +43,12 @@ export default {
     }
   },
   created () {
-    let token = localStorage.getItem('user-token')
     this.$axios({
-      url: '/user/profile',
-      method: 'get',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      url: '/user/profile'
+      // method: 'get'默认是get类型
     }).then((res) => {
-      console.log(res.data.data)
-      this.userInfo = res.data.data
+      // console.log(res.data)
+      this.userInfo = res.data
     })
   },
   methods: {

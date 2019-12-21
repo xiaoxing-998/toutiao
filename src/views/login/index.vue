@@ -28,6 +28,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -84,20 +85,20 @@ export default {
             data: this.loginForm
           })
             .then(res => {
-              // this.statuscode = res.status
-              console.log(res)
-              window.localStorage.setItem('user-token', res.data.data.token)
+              // console.log(res)
+              window.localStorage.setItem('user-token', res.data.token)// 前端缓存令牌
               this.$router.push('/home') // 成功后跳到主页
             })
-            .catch(() => {
-              this.$message({
-                message: '警告，您的手机号或验证码不正确',
-                type: 'warning'
-              })
-              // 用户非实名认证用户
-              // console.log(this.statuscode)
-              // if (res.status === 403)
-            })
+            // .catch((rs) => {
+            //   console.log(rs)
+            //   this.$message({
+            //     message: '警告，您的手机号或验证码不正确',
+            //     type: 'warning'
+            //   })
+            //   // 用户非实名认证用户
+            //   // console.log(this.statuscode)
+            //   // if (res.status === 403)
+            // })
         }
       })
     }
