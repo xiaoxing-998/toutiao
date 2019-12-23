@@ -1,6 +1,6 @@
 <template>
   <!-- 一级路由容器 -->
-  <div v-cloak>
+  <div>
     <router-view />
   </div>
 
@@ -12,7 +12,5 @@ export default {
 }
 </script>
 <style lang="less">
-[v-cloak]{
-  display: none;
-}
+
 </style>

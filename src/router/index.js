@@ -17,10 +17,19 @@ const routes = [
     component: Home,
     children: [{
       path: '',
-      component: Default
-    }]
+      component: Default// 默认二级路由 显示的组件
+    }, {
+      path: 'comment', // 评论列表
+      component: () => import('../views/comment')// 按需加载
+    },
+    {
+      path: 'articles', // 内容列表
+      component: () => import('../views/articles')
+    }
+    ]
   },
   {
+    // 登录页
     path: '/login',
     component: Login
   }

@@ -6,7 +6,7 @@ router.beforeEach(function (to, from, next) {
   if (to.path.startsWith('/home')) {
     // 判断令牌
     if (usertoken) {
-      next()// 放行
+      next()// 放行  next执行函数
     } else {
       next('/login')// 无令牌去登录
     }
