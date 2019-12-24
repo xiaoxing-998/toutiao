@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card  v-loading="loading">
     <!-- 面包屑组件传给card的具名插槽 -->
     <bread-crumb slot="header">
       <!-- 传入插槽内容 -->
@@ -41,18 +41,21 @@ export default {
         total: 0, // 数据总条数
         pageSize: 10, // 默认每页条数
         currentPage: 1 // 当前默认页数
-      }
+      },
+      loading: false // 数据加载前的动画 默认关闭
     }
   },
   methods: {
     // 请求列表数据
     getComment () {
+      this.loading = true // 加载数据前打开
       this.$axios({
         url: '/articles',
         params: { response_type: 'comment', page: this.pageData.currentPage, per_page: this.pageData.pageSize }
       }).then(res => {
         this.tableData = res.data.results // 获取评论列表数据
         this.pageData.total = res.data.total_count // 文章总页数
+        this.loading = false // 加载数据后关闭
       })
     },
     // 将函数作为一个对象的写法  转化评论状态

@@ -6,20 +6,20 @@
        <el-tabs v-model="activeName" @tab-click="changeTab">
              <el-tab-pane label="全部素材" name="all">
                 <div class="img-list">
-                    <el-card class="all-img" v-for="item in allData" :key='item.id'>
+                    <div class="all-img" v-for="item in allData" :key='item.id'>
                         <img :src="item.url" alt="all-poto">
                         <el-row type="flex" align="middle" justify="space-around" class="icon-font">
                             <i class="el-icon-star-on"></i>
                             <i class="el-icon-delete-solid"></i>
                         </el-row>
-                    </el-card>
+                    </div>
                 </div>
              </el-tab-pane>
              <el-tab-pane label="收藏素材" name="collect">
                   <div class="img-list">
-                    <el-card class="all-img" v-for="item in allData" :key='item.id'>
+                    <div class="all-img" v-for="item in allData" :key='item.id'>
                         <img :src="item.url" alt="all-poto">
-                    </el-card>
+                    </div>
                 </div>
              </el-tab-pane>
        </el-tabs>
@@ -66,13 +66,15 @@ export default {
         display: flex;
         flex-wrap: wrap;
         .all-img {
-            width: 200px;
-            height: 200px;
+            width: 150px;
+            height: 150px;
             margin: 20px 50px;
             position: relative;
+            padding: 0px !important;
             img {
                 width: 100%;
-                height: 100px;
+                height: 100%;
+                border-radius: 5px;
             }
             .icon-font {
                 // text-align: center;
