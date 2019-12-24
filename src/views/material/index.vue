@@ -1,8 +1,13 @@
 <template>
-  <el-card>
+  <el-card  v-loading="loading">
     <bread-crumb slot="header">
       <template slot="title">素材管理</template>
     </bread-crumb>
+    <el-row type="flex" justify="end" align="middle">
+      <el-upload action :show-file-list="false" :http-request="uploadImg">
+        <el-button size="small" type="primary">点击上传</el-button>
+      </el-upload>
+    </el-row>
     <el-tabs v-model="activeName" @tab-click="changeTab">
       <el-tab-pane label="全部素材" name="all">
         <div class="img-list">
@@ -41,6 +46,7 @@ export default {
       // 默认选中全部
       activeName: 'all', // 点击切换时将被改变为当前切换的name
       allData: [], // 接收全部数据
+      loading: false, // 默认加载进度条动画关闭
       page: {
         total_count: 0, // 图片总数
         page: 1, // 当前页数
@@ -50,6 +56,23 @@ export default {
     }
   },
   methods: {
+    // 上传文件
+    uploadImg (params) {
+      this.loading = true // 请求接口时打开进度条
+      // console.log(params) 对象  需用到里面的file对象
+      let formData = new FormData()
+      formData.append('image', params.file) // 接口参数名 +上传的文件  添加文件到formdata
+
+      this.$axios({
+        url: 'user/images',
+        method: 'post',
+        data: formData // 接口要求formdata数据
+      }).then((res) => {
+        this.loading = false // 数据返回成功时关闭进度条
+        // 重新刷新
+        this.getAllMaterial()
+      })
+    },
     // 分页切换事件
     changePage (currentPage) {
       this.page.page = currentPage // 最新页码
