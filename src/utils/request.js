@@ -16,10 +16,9 @@ axios.interceptors.request.use(function (config) {
   // reject 状态是承诺失败 将在catch中接收
   return Promise.reject(error)
 })
-
 // 处理大数据  避免失真   对原属性进行变化 axios默认选项中的transformresponse响应拦截之前执行的函数
 axios.defaults.transformResponse = [function (data) {
-  return JSONBig.parse(data)
+  return data ? JSONBig.parse(data) : {} // 超长数
 }]
 // 响应拦截器
 axios.interceptors.response.use(function (response) {
@@ -27,9 +26,8 @@ axios.interceptors.response.use(function (response) {
   // 处理成功响应数据
   return response.data ? response.data : {}
 }, function (error) {
-  //   debugger
+  // debugger
   //   console.log(error)
-
   // 处理响应错误
   let status = error.response.status //   当前状态码
   let configurl = error.request.responseURL //   请求地址
@@ -68,7 +66,7 @@ axios.interceptors.response.use(function (response) {
   // } else if (configurl === 'http://ttapi.research.itcast.cn/mp/v1_0/authorizations' && status === 400) {
   //   message = '参数缺失、手机号格式不正确、验证码失效'
   // }
-  debugger
+
   if (status === 400) {
     message = '请求参数错误'
   } else if (status === 401) {

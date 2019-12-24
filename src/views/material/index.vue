@@ -14,8 +14,8 @@
           <div class="all-img" v-for="item in allData" :key="item.id">
             <img :src="item.url" alt="all-poto" />
             <el-row type="flex" align="middle" justify="space-around" class="icon-font">
-              <i class="el-icon-star-on"></i>
-              <i class="el-icon-delete-solid"></i>
+              <i @click="changeColor(item.id,item.is_collected)" class="el-icon-star-on" v-bind:style="{color:item.is_collected?'red':''}"></i>
+              <i @click="delImg(item.id)" class="el-icon-delete-solid"></i>
             </el-row>
           </div>
         </div>
@@ -56,6 +56,43 @@ export default {
     }
   },
   methods: {
+    // 删除图片素材
+
+    delImg (id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.$axios({
+          url: `user/images/${id}`,
+          method: 'delete'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.getAllMaterial()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    // 改变收藏的颜色
+    // 图片id 以及图片目前是否被收藏 已被收藏为true
+    changeColor (id, collectStatus) {
+      this.$axios({
+        url: `user/images/${id}`,
+        method: 'put',
+        data: {
+          collect: !collectStatus // 收藏改为取消
+        }
+
+      }).then((res) => {
+        this.getAllMaterial()
+      })
+    },
     // 上传文件
     uploadImg (params) {
       this.loading = true // 请求接口时打开进度条
@@ -131,6 +168,9 @@ export default {
       left: 0;
       background-color: #f4f5f6;
       height: 30px;
+      i {
+        cursor: pointer;
+      }
     }
   }
 }
