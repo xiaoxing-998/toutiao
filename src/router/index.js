@@ -25,6 +25,10 @@ const routes = [
     {
       path: 'articles', // 内容列表
       component: () => import('../views/articles')
+    },
+    {
+      path: 'material', // 素材管理
+      component: () => import('../views/material')// 按需加载
     }
     ]
   },
