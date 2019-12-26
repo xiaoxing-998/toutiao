@@ -92,9 +92,7 @@ export default {
     }
     .user-name {
       margin-left: 10px;
-      i {
-        // padding-left: 13px;
-      }
+
     }
   }
 }

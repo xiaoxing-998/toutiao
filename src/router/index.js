@@ -29,6 +29,9 @@ const routes = [
     {
       path: 'material', // 素材管理
       component: () => import('../views/material')// 按需加载
+    }, {
+      path: 'publish', // 发布文章
+      component: () => import('../views/publish')
     }
     ]
   },
