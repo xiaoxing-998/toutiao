@@ -96,7 +96,7 @@
             <span>
               <i class="el-icon-edit"></i>修改
             </span>
-            <span>
+            <span @click="delArticles(item.id.toString())">
               <i class="el-icon-delete"></i>删除
             </span>
           </el-row>
@@ -168,6 +168,23 @@ export default {
     }
   },
   methods: {
+    // 删除文章
+    delArticles (id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.$axios({
+          url: `/articles/${id}`,
+          method: 'delete'
+        }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          })
+          this.getConditionArticles()
+        })
+      })
+    },
     // 改变分页事件
     changePage (page) {
       // 当前点击页码 赋值当前最新页
