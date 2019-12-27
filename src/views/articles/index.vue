@@ -12,11 +12,11 @@
         </el-col>
         <!-- {{formdata.radio}} -->
         <el-col :span="22">
-          <el-radio-group v-model="formdata.status">
+          <el-radio-group @change="changeCondition" v-model="formdata.status">
             <el-radio :label="5">全部</el-radio>
             <el-radio :label="0">草稿</el-radio>
             <el-radio :label="1">待审核</el-radio>
-            <el-radio :label="2">审核通过</el-radio>
+            <el-radio :label="2">已发表</el-radio>
             <el-radio :label="3">审核失败</el-radio>
           </el-radio-group>
         </el-col>
@@ -28,7 +28,7 @@
         </el-col>
         <!-- {{formdata.channels_id}} -->
         <el-col :span="22">
-          <el-select v-model="formdata.channels_id" placeholder="请选择" style=" width: 350px">
+          <el-select  @change="changeCondition"  v-model="formdata.channels_id" placeholder="请选择" style=" width: 350px">
             <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-col>
@@ -41,7 +41,9 @@
         <!-- {{formdata.pubdate}} -->
         <el-col :span="22">
           <el-date-picker
+           @change="changeCondition"
             v-model="formdata.pubdate"
+            value-format="yyyy-MM-dd"
             type="daterange"
             range-separator="-"
             start-placeholder="开始日期"
@@ -71,7 +73,7 @@
         justify="space-between"
         class="articles-item"
       >
-      <!-- {{item.cover.images.length}} -->
+        <!-- {{item.cover.images.length}} -->
         <!-- 左侧内容 -->
         <el-col :span="14">
           <el-row type="flex">
@@ -130,6 +132,7 @@ export default {
           break
       }
     },
+    // 显示标签类型9
     filterType (value) {
       switch (value) {
         case 0:
@@ -144,6 +147,17 @@ export default {
     }
   },
   methods: {
+    // 改变单选框组条件
+    changeCondition () {
+    //   alert(1)
+      let params = {
+        status: this.formdata.status === 5 ? null : this.formdata.status, // 为5显示不传 则查全部
+        channel_id: this.formdata.channels_id,
+        begin_pubdate: this.formdata.pubdate.length > 0 ? this.formdata.pubdate[0] : null,
+        end_pubdate: this.formdata.pubdate.length > 1 ? this.formdata.pubdate[1] : null
+      }
+      this.getArticles(params)
+    },
     // 获取频道
     getChannels () {
       this.$axios({
@@ -153,9 +167,10 @@ export default {
       })
     },
     // 获取文章列表数据
-    getArticles () {
+    getArticles (params) {
       this.$axios({
-        url: '/articles'
+        url: '/articles',
+        params
       }).then(res => {
         this.list = res.data.results
         this.count = res.data.total_count
