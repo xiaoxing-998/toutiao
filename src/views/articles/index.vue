@@ -28,7 +28,12 @@
         </el-col>
         <!-- {{formdata.channels_id}} -->
         <el-col :span="22">
-          <el-select  @change="changeCondition"  v-model="formdata.channels_id" placeholder="请选择" style=" width: 350px">
+          <el-select
+            @change="changeCondition"
+            v-model="formdata.channels_id"
+            placeholder="请选择"
+            style=" width: 350px"
+          >
             <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-col>
@@ -41,7 +46,7 @@
         <!-- {{formdata.pubdate}} -->
         <el-col :span="22">
           <el-date-picker
-           @change="changeCondition"
+            @change="changeCondition"
             v-model="formdata.pubdate"
             value-format="yyyy-MM-dd"
             type="daterange"
@@ -63,7 +68,7 @@
     <el-card class="articlesList">
       <!-- 主体标题 -->
       <el-row class="count">
-        <span>共找到{{count}}条符合条件的内容</span>
+        <span>共找到{{page.count}}条符合条件的内容</span>
       </el-row>
       <!-- 循环的数据模板 -->
       <el-row
@@ -97,6 +102,18 @@
           </el-row>
         </el-col>
       </el-row>
+      <!-- 页面主体结构  end-->
+      <el-row type="flex" justify="center" align="middle" style="height:80px">
+        <!-- 分页插件 start -->
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="page.count"
+          :current-page="page.currentPage"
+          :page-size="page.per_page"
+          @current-change="changePage"
+        ></el-pagination>
+      </el-row>
     </el-card>
   </el-card>
 </template>
@@ -110,7 +127,11 @@ export default {
         channels_id: null, // 频道列表框默认没有选择值
         pubdate: [] // 文章起始时间、截止时间
       },
-      count: 0, // 文章总数
+      page: {
+        currentPage: 1, // 当前页码 默认第一页
+        per_page: 12, // 每页页数 显示条目个数
+        count: 0 // 文章总数
+      },
       channels: [], // 文章频道数据
       list: [], // 接受文章列表数据
       defaultImg: require('../../assets/img/小埋.png')
@@ -132,7 +153,7 @@ export default {
           break
       }
     },
-    // 显示标签类型9
+    // 显示标签类型
     filterType (value) {
       switch (value) {
         case 0:
@@ -147,14 +168,29 @@ export default {
     }
   },
   methods: {
-    // 改变单选框组条件
+    // 改变分页事件
+    changePage (page) {
+      // 当前点击页码 赋值当前最新页
+      this.page.currentPage = page
+      this.getConditionArticles()
+    },
+    // 改变条件
     changeCondition () {
-    //   alert(1)
+      //   alert(1)
+      this.page.currentPage = 1 // 当改变条件时 强制将当前页码返回到第一页
+      this.getConditionArticles()
+    },
+    // 封装请求列表数据&分页数据的方法   改变页码 改变条件
+    getConditionArticles () {
       let params = {
+        page: this.page.currentPage, // 请求的页数
+        per_page: this.page.per_page, // 请求每页条目数
         status: this.formdata.status === 5 ? null : this.formdata.status, // 为5显示不传 则查全部
-        channel_id: this.formdata.channels_id,
-        begin_pubdate: this.formdata.pubdate.length > 0 ? this.formdata.pubdate[0] : null,
-        end_pubdate: this.formdata.pubdate.length > 1 ? this.formdata.pubdate[1] : null
+        channel_id: this.formdata.channels_id, // 下拉框显示值
+        begin_pubdate:
+          this.formdata.pubdate.length > 0 ? this.formdata.pubdate[0] : null,
+        end_pubdate:
+          this.formdata.pubdate.length > 1 ? this.formdata.pubdate[1] : null
       }
       this.getArticles(params)
     },
@@ -166,14 +202,14 @@ export default {
         this.channels = res.data.channels
       })
     },
-    // 获取文章列表数据
+    // 获取文章列表/分页数据 条件切换
     getArticles (params) {
       this.$axios({
         url: '/articles',
         params
       }).then(res => {
-        this.list = res.data.results
-        this.count = res.data.total_count
+        this.list = res.data.results // 接受文章列表数据
+        this.page.count = res.data.total_count
       })
     }
   },
