@@ -4,6 +4,7 @@
       <bread-crumb slot="header">
         <template slot="title">内容列表</template>
       </bread-crumb>
+      <!-- 使用change监听或watch深度检测 -->
       <!-- 选项区域 start -->
       <!-- 文章状态 -->
       <el-row class="articlesTool" type="flex" align="middle">
@@ -11,8 +12,18 @@
           <span>文章状态:</span>
         </el-col>
         <!-- {{formdata.radio}} -->
-        <el-col :span="22">
+        <!-- <el-col :span="22">
           <el-radio-group @change="changeCondition" v-model="formdata.status">
+            <el-radio :label="5">全部</el-radio>
+            <el-radio :label="0">草稿</el-radio>
+            <el-radio :label="1">待审核</el-radio>
+            <el-radio :label="2">已发表</el-radio>
+            <el-radio :label="3">审核失败</el-radio>
+          </el-radio-group>
+        </el-col>
+        </el-row>-->
+        <el-col :span="22">
+          <el-radio-group v-model="formdata.status">
             <el-radio :label="5">全部</el-radio>
             <el-radio :label="0">草稿</el-radio>
             <el-radio :label="1">待审核</el-radio>
@@ -27,9 +38,18 @@
           <span>频道列表:</span>
         </el-col>
         <!-- {{formdata.channels_id}} -->
-        <el-col :span="22">
+        <!-- <el-col :span="22">
           <el-select
             @change="changeCondition"
+            v-model="formdata.channels_id"
+            placeholder="请选择"
+            style=" width: 350px"
+          >
+            <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-col>-->
+        <el-col :span="22">
+          <el-select
             v-model="formdata.channels_id"
             placeholder="请选择"
             style=" width: 350px"
@@ -44,9 +64,19 @@
           <span>时间选择:</span>
         </el-col>
         <!-- {{formdata.pubdate}} -->
-        <el-col :span="22">
+        <!-- <el-col :span="22">
           <el-date-picker
             @change="changeCondition"
+            v-model="formdata.pubdate"
+            value-format="yyyy-MM-dd"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          ></el-date-picker>
+        </el-col>-->
+        <el-col :span="22">
+          <el-date-picker
             v-model="formdata.pubdate"
             value-format="yyyy-MM-dd"
             type="daterange"
@@ -135,6 +165,17 @@ export default {
       channels: [], // 文章频道数据
       list: [], // 接受文章列表数据
       defaultImg: require('../../assets/img/小埋.png')
+    }
+  },
+  watch: {
+    formdata: {
+      handler () {
+        // 只要formdata对象中数据发生了变化都会触发此函数
+        // 此函数内部this也指向了组件实例
+        // alert(this.formdata.status) //数据已经是最新
+        this.changeCondition()
+      },
+      deep: true // 深度检测
     }
   },
   filters: {
