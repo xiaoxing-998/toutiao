@@ -33,8 +33,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="checkoutForm">发表</el-button>
-        <el-button @click="checkoutForm">存入草稿</el-button>
+        <el-button type="primary" @click="checkoutForm()">发表</el-button>
+        <el-button @click="checkoutForm(true)">存入草稿</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -73,11 +73,19 @@ export default {
       })
       this.channels = res.data.channels
     },
-    // 文章表单整体校验
-    checkoutForm () {
-      this.$refs.publishForm.validate(function (success) {
+    // 文章表单整体校验&发布文章 draft为true是草稿
+    checkoutForm (draft) {
+      this.$refs.publishForm.validate(success => {
         if (success) {
-          console.log('校验成功')
+          this.$axios({
+            url: '/articles',
+            method: 'post',
+            params: { draft },
+            data: this.formData
+          }).then(res => {
+            // 发布成功 跳转到内容列表
+            this.$router.push('/home/articles')
+          })
         }
       })
     }
