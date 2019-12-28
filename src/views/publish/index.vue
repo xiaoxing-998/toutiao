@@ -33,8 +33,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="checkoutForm()">发表</el-button>
-        <el-button @click="checkoutForm(true)">存入草稿</el-button>
+        <el-button type="primary" @click="publishArticle()">发表</el-button>
+        <el-button @click="publishArticle(true)">存入草稿</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -66,9 +66,8 @@ export default {
     }
   },
   watch: {
-    '$route' (to, from) {
+    $route (to, from) {
       if (Object.keys(to.params).length) {
-
       } else {
         //   没有参数 则清空--发布页面
         this.formData = {
@@ -90,13 +89,16 @@ export default {
       })
       this.channels = res.data.channels
     },
-    // 文章表单整体校验&发布文章 draft为true是草稿
-    checkoutForm (draft) {
+    // 文章表单整体校验  draft为true是草稿 否则非草稿
+    // 修改&发布
+    publishArticle (draft) {
       this.$refs.publishForm.validate(success => {
         if (success) {
+          //   如果存在则是修改
+          let { articleId } = this.$route.params
           this.$axios({
-            url: '/articles',
-            method: 'post',
+            url: articleId ? `/articles/${articleId}` : '/articles',
+            method: articleId ? 'put' : 'post',
             params: { draft },
             data: this.formData
           }).then(res => {
@@ -105,10 +107,21 @@ export default {
           })
         }
       })
+    },
+    // 通过id获取指定文章详情
+    getArticleById (id) {
+      this.$axios({
+        url: `/articles/${id}`,
+        method: 'get'
+      }).then(res => {
+        this.formData = res.data // 将此id的文章数据赋值 并渲染
+      })
     }
   },
   created () {
     this.getChannelsData() // 获取下拉频道数据
+    let { articleId } = this.$route.params // 判断是哪个页面
+    articleId && this.getArticleById(articleId) // 将id传入获取文章数据方法
   }
 }
 </script>
