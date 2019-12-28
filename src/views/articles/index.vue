@@ -123,7 +123,7 @@
         <!-- 右侧内容 -->
         <el-col :span="6">
           <el-row type="flex" justify="end" class="operation">
-            <span>
+            <span @click="toModify(item.id.toString())">
               <i class="el-icon-edit"></i>修改
             </span>
             <span @click="delArticles(item.id.toString())">
@@ -209,6 +209,10 @@ export default {
     }
   },
   methods: {
+    // 点击修改文章将id带过去
+    toModify (articleId) {
+      this.$router.push(`/home/publish/${articleId}`)
+    },
     // 删除文章
     delArticles (id) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

@@ -65,6 +65,23 @@ export default {
       }
     }
   },
+  watch: {
+    '$route' (to, from) {
+      if (Object.keys(to.params).length) {
+
+      } else {
+        //   没有参数 则清空--发布页面
+        this.formData = {
+          title: '', // 文章标题
+          content: '', // 文章内容
+          cover: {
+            type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+            images: [] // 存储图片地址
+          }
+        }
+      }
+    }
+  },
   methods: {
     // 获取频道
     async getChannelsData () {
