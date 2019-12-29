@@ -15,10 +15,10 @@
         <el-input v-model="formData.title" style="width:30%" placeholder="文章名称"></el-input>
       </el-form-item>
       <el-form-item prop="content" label="内容">
-        <el-input v-model="formData.content" type="textarea" :rows="10" placeholder="请输入内容"></el-input>
+        <quill-editor v-model="formData.content" style="height:300px"></quill-editor>
       </el-form-item>
-      <!-- {{formData.cover.type}} -->
-      <el-form-item label="封面" prop="type">
+      <!-- {{formData.cover}} -->
+      <el-form-item label="封面" prop="type"  style="margin-top:120px">
         <el-radio-group v-model="formData.cover.type">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
@@ -26,6 +26,8 @@
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
       </el-form-item>
+       <!-- 放置一个封面组件 -->
+      <img-cover :imageList="formData.cover.images"></img-cover>
       <!-- {{channels}} -->
       <el-form-item label="频道" prop="channel_id">
         <el-select placeholder="请选择" v-model="formData.channel_id">
@@ -66,8 +68,11 @@ export default {
     }
   },
   watch: {
+    //   监控路由 两个路由共用一个组件跳转时  组件没有被销毁
     $route (to, from) {
       if (Object.keys(to.params).length) {
+        //   有参数则是修改 重新获取数据
+        this.getArticleById(to.params.articleId)
       } else {
         //   没有参数 则清空--发布页面
         this.formData = {
@@ -78,6 +83,19 @@ export default {
             images: [] // 存储图片地址
           }
         }
+      }
+    },
+    // 监控type的变化决定images的长度
+    'formData.cover.type': function () {
+      if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+        // 无图或者自动模式
+        this.formData.cover.images = []
+      } else if (this.formData.cover.type === 1) {
+        //   单图模式
+        this.formData.cover.images = ['']
+      } else if (this.formData.cover.type === 3) {
+        //   三图模式
+        this.formData.cover.images = ['', '', '']
       }
     }
   },
