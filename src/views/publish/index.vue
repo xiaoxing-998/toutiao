@@ -19,7 +19,7 @@
       </el-form-item>
       <!-- {{formData.cover}} -->
       <el-form-item label="封面" prop="type"  style="margin-top:120px">
-        <el-radio-group v-model="formData.cover.type">
+        <el-radio-group @change="changeType" v-model="formData.cover.type">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
           <el-radio :label="0">无图</el-radio>
@@ -84,9 +84,24 @@ export default {
           }
         }
       }
-    },
-    // 监控type的变化决定images的长度
-    'formData.cover.type': function () {
+    }
+    // 监控type的变化决定images的长度 此方法type变了就会将地址赋空  不正确
+    // 'formData.cover.type': function () {
+    //   if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+    //     // 无图或者自动模式
+    //     this.formData.cover.images = []
+    //   } else if (this.formData.cover.type === 1) {
+    //     //   单图模式
+    //     this.formData.cover.images = ['']
+    //   } else if (this.formData.cover.type === 3) {
+    //     //   三图模式
+    //     this.formData.cover.images = ['', '', '']
+    //   }
+    // }
+  },
+  methods: {
+    //   切换类型时赋空 未点击切换则是接口赋值的图片地址
+    changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
         // 无图或者自动模式
         this.formData.cover.images = []
@@ -97,9 +112,7 @@ export default {
         //   三图模式
         this.formData.cover.images = ['', '', '']
       }
-    }
-  },
-  methods: {
+    },
     // 获取频道
     async getChannelsData () {
       let res = await this.$axios({
