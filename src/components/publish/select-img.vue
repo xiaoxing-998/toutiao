@@ -8,14 +8,21 @@
       </div>
       <!-- 分页组件 -->
       <el-row type="flex" justify="center" style="margin-top:14px;">
-        <el-pagination background layout="prev, pager, next"
-        :total="page.total"
-        :current-page='page.currentPage'
-        :page-size="page.pageSize"
-        @current-change="changePage"></el-pagination>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="page.total"
+          :current-page="page.currentPage"
+          :page-size="page.pageSize"
+          @current-change="changePage"
+        ></el-pagination>
       </el-row>
     </el-tab-pane>
-    <el-tab-pane label="上传图片" name="upload">上传的图片</el-tab-pane>
+    <el-tab-pane label="上传图片" name="upload">
+      <el-upload action :http-request="uploadImg" :show-file-list="false" class="upload-img">
+        <i class="el-icon-plus"></i>
+      </el-upload>
+    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -33,6 +40,18 @@ export default {
     }
   },
   methods: {
+    // 点击上传图片
+    uploadImg (params) {
+      let data = new FormData()
+      data.append('image', params.file)
+      this.$axios({
+        url: '/user/images',
+        method: 'post',
+        data
+      }).then(res => {
+        this.$emit('selectImgUrl', res.data.url)
+      })
+    },
     // 接收当前点击图片地址
     clickImgUrl (url) {
       // alert(url)
@@ -78,6 +97,21 @@ export default {
       width: 100%;
       height: 100%;
     }
+  }
+}
+.upload-img {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  i {
+    display: block;
+    width: 180px;
+    height: 180px;
+    border: 1px dashed #ccc;
+    font-size: 60px;
+    border-radius: 3px;
+    padding:60px;
   }
 }
 </style>

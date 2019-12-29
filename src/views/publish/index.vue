@@ -103,12 +103,13 @@ export default {
     // 得到儿子传来的下标和孙子的图片地址
     getCover (img, index) {
       // alert(img + index + '哈哈哈')
-      this.formData.cover.images = this.formData.cover.images.map(function (item, i) {
-        if (index === i) {
-          return img
-        }
-        return item
-      })
+      // this.formData.cover.images = this.formData.cover.images.map(function (item, i) {
+      //   if (index === i) {
+      //     return img
+      //   }
+      //   return item
+      // })
+      this.formData.cover.images = this.formData.cover.images.map((item, i) => index === i ? img : item)
     },
     //   切换类型时赋空 未点击切换则是接口赋值的图片地址
     changeType () {
