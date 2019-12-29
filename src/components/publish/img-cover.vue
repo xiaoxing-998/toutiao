@@ -1,12 +1,12 @@
 <template>
   <div class="img-cover">
-    <div @click="openDialog" class="img-item" v-for="(item,index) in imageList" :key="index">
+    <div @click="openDialog(index)" class="img-item" v-for="(item,index) in imageList" :key="index">
       <div class="title">点击选择图片</div>
       <!-- {{item}} -->
       <img :src="item?item:defaultbg" alt="defaultbg" />
     </div>
     <el-dialog :visible="status" @close="closeDialog">
-      <select-img>123</select-img>
+      <select-img @selectImgUrl="receiveImg"></select-img>
     </el-dialog>
   </div>
 </template>
@@ -17,12 +17,21 @@ export default {
   data () {
     return {
       defaultbg: require('../../assets/img/pic_bg.png'),
-      status: false
+      status: false,
+      selectIndex: -1 // 用户点击图片时的下标 (三图为0,1,2  单图为0  默认无图)
     }
   },
   methods: {
-    openDialog () {
-      this.status = true
+    // 接收儿子传来的图片
+    receiveImg (img) {
+      // alert('收到了' + img)
+      this.$emit('selectImg', img, this.selectIndex)
+      this.closeDialog()
+    },
+    openDialog (index) {
+      // alert(index)
+      this.selectIndex = index // 当前点击的下标
+      this.status = true // 打开弹层
     },
     closeDialog () {
       this.status = false

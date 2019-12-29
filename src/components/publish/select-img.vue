@@ -3,7 +3,7 @@
     <el-tab-pane label="素材库" name="material">
       <div class="material-list">
         <el-card class="material-item" v-for="item in list" :key="item.id">
-          <img :src="item.url" alt="material-item" />
+          <img :src="item.url" @click="clickImgUrl(item.url)" alt="material-item" />
         </el-card>
       </div>
       <!-- 分页组件 -->
@@ -33,6 +33,11 @@ export default {
     }
   },
   methods: {
+    // 接收当前点击图片地址
+    clickImgUrl (url) {
+      // alert(url)
+      this.$emit('selectImgUrl', url)
+    },
     //   获取分页数据
     changePage (page) {
       this.page.currentPage = page

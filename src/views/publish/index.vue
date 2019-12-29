@@ -27,7 +27,7 @@
         </el-radio-group>
       </el-form-item>
        <!-- 放置一个封面组件 -->
-      <img-cover :imageList="formData.cover.images"></img-cover>
+      <img-cover @selectImg="getCover" :imageList="formData.cover.images"></img-cover>
       <!-- {{channels}} -->
       <el-form-item label="频道" prop="channel_id">
         <el-select placeholder="请选择" v-model="formData.channel_id">
@@ -100,6 +100,16 @@ export default {
     // }
   },
   methods: {
+    // 得到儿子传来的下标和孙子的图片地址
+    getCover (img, index) {
+      // alert(img + index + '哈哈哈')
+      this.formData.cover.images = this.formData.cover.images.map(function (item, i) {
+        if (index === i) {
+          return img
+        }
+        return item
+      })
+    },
     //   切换类型时赋空 未点击切换则是接口赋值的图片地址
     changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
